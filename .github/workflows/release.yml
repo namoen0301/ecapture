@@ -10,8 +10,8 @@ concurrency:
 
 jobs:
 
-  build-on-ubuntu2204:
-    runs-on: ubuntu-22.04
+  build-on-ubuntu2404:
+    runs-on: ubuntu-24.04
     name: release Linux/Android Version (amd64/arm64)
     steps:
       - uses: actions/setup-go@v5
@@ -24,8 +24,8 @@ jobs:
             build-essential \
             pkgconf \
             libelf-dev \
-            llvm-14 \
-            clang-14 \
+            llvm-18 \
+            clang-18 \
             linux-tools-common \
             linux-tools-generic \
             gcc \
@@ -34,7 +34,7 @@ jobs:
           for tool in "clang" "llc" "llvm-strip"
           do
             sudo rm -f /usr/bin/$tool
-            sudo ln -s /usr/bin/$tool-14 /usr/bin/$tool
+            sudo ln -s /usr/bin/$tool-18 /usr/bin/$tool
           done
           cd /usr/src
           source_file=$(find . -maxdepth 1 -name "*linux-source*.tar.bz2")
@@ -99,7 +99,7 @@ jobs:
         run: |
           make -f builder/Makefile.release publish SNAPSHOT_VERSION=${{ github.ref_name }}
   build-docker-image:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4

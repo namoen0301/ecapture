@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build-debug-artifacts:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Build Debug Artifacts
     strategy:
       matrix:
@@ -35,8 +35,8 @@ jobs:
             build-essential \
             pkgconf \
             libelf-dev \
-            llvm-14 \
-            clang-14 \
+            llvm-18 \
+            clang-18 \
             linux-tools-common \
             linux-tools-generic \
             gcc \
@@ -45,7 +45,7 @@ jobs:
           for tool in "clang" "llc" "llvm-strip"
           do
             sudo rm -f /usr/bin/$tool
-            sudo ln -s /usr/bin/$tool-14 /usr/bin/$tool
+            sudo ln -s /usr/bin/$tool-18 /usr/bin/$tool
           done
           cd /usr/src
           source_file=$(find . -maxdepth 1 -name "*linux-source*.tar.bz2")
@@ -91,7 +91,7 @@ jobs:
           du -h dist/*
 
   comment-pr:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Comment PR with Download Links
     needs: build-debug-artifacts
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
